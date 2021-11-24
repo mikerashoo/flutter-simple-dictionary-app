@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_simple_dictionary_app/models/word.dart';
 
 class WordDetailScreen extends StatefulWidget {
-  WordDetailScreen({Key? key, required this.word}) : super(key: key);
+  const WordDetailScreen({Key? key, required this.word}) : super(key: key);
 
-  Word word;
+  final Word word;
   @override
   _WordDetailScreenState createState() => _WordDetailScreenState();
 }
@@ -36,7 +36,7 @@ class _WordDetailScreenState extends State<WordDetailScreen> {
                     widget.word.kafinoonoo,
                     style: const TextStyle(fontSize: 30),
                   ),
-                  word.type == "null" ? SizedBox() : Text(word.type)
+                  word.type == "null" ? const SizedBox() : Text(word.type)
                 ],
               ),
               const SizedBox(
