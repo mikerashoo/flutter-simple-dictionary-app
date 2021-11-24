@@ -83,27 +83,33 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           Flexible(
-            child: ListView(
-              padding: const EdgeInsets.all(8.0),
-              physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics()),
-              children: appProvider.currentWords.map((i) {
-                return Card(
-                  child: ListTile(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WordDetailScreen(
-                                    word: i,
-                                  )),
-                        );
-                      },
-                      title: Text(i.kafinoonoo),
-                      subtitle: i.type != "null" ? Text(i.type) : null),
-                );
-              }).toList(),
-            ),
+            child: appProvider.currentWords.isEmpty
+                ? const Center(
+                    child: const Text(
+                    "No word found",
+                    style: TextStyle(color: Colors.orange),
+                  ))
+                : ListView(
+                    padding: const EdgeInsets.all(8.0),
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    children: appProvider.currentWords.map((i) {
+                      return Card(
+                        child: ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => WordDetailScreen(
+                                          word: i,
+                                        )),
+                              );
+                            },
+                            title: Text(i.kafinoonoo),
+                            subtitle: i.type != "null" ? Text(i.type) : null),
+                      );
+                    }).toList(),
+                  ),
           )
         ],
       ),
