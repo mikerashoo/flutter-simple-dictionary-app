@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_simple_dictionary_app/models/word.dart';
 import 'package:flutter_simple_dictionary_app/models/sample_dictionary.dart';
+import 'package:flutter_simple_dictionary_app/providers/app_provider.dart';
+import 'package:flutter_simple_dictionary_app/repositories/db_helper.dart';
+import 'package:flutter_simple_dictionary_app/repositories/dictionary_repository.dart';
 import 'package:flutter_simple_dictionary_app/word_detail_screen.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
+  // dbHelper.initDb();
 }
 
 class MyApp extends StatelessWidget {
@@ -13,13 +18,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AppProvider>(create: (_) => AppProvider()),
+        ],
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        ));
   }
 }
 
@@ -34,8 +43,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   ScrollController _controller = new ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    setDatabase();
+  }
+
+  void setDatabase() async {
+    DictionaryRepository dictionaryRepository =
+        DictionaryRepository(db: await DbHelper().initDb());
+    AppProvider appProvider =
+        Provider.of<AppProvider>(this.context, listen: false);
+    appProvider.setDictionaryRepository(dictionaryRepository);
+    appProvider.fetchWords();
+  }
+
   @override
   Widget build(BuildContext context) {
+    AppProvider appProvider = Provider.of<AppProvider>(context);
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -58,21 +84,20 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(8.0),
               physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
-              children: wordList.map((i) {
+              children: appProvider.words.map((i) {
                 return Card(
                   child: ListTile(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WordDetailScreen(
-                                  word: i,
-                                )),
-                      );
-                    },
-                    title: Text(i.kafinoonoo),
-                    subtitle: Text(i.type),
-                  ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WordDetailScreen(
+                                    word: i,
+                                  )),
+                        );
+                      },
+                      title: Text(i.kafinoonoo),
+                      subtitle: i.type != "null" ? Text(i.type) : null),
                 );
               }).toList(),
             ),

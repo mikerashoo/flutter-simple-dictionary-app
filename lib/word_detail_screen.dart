@@ -34,9 +34,9 @@ class _WordDetailScreenState extends State<WordDetailScreen> {
                 children: [
                   Text(
                     widget.word.kafinoonoo,
-                    style: TextStyle(fontSize: 30),
+                    style: const TextStyle(fontSize: 30),
                   ),
-                  Text(word.type)
+                  word.type == "null" ? SizedBox() : Text(word.type)
                 ],
               ),
               const SizedBox(
