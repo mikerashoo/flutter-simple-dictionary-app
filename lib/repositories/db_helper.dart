@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
   Future<Database> initDb() async {
-    final path = join(await getDatabasesPath(), 'dictionary.db');
+    final path = join(await getDatabasesPath(), 'words.db');
     final isExist = await databaseExists(path);
     if (isExist) {
       return await openDatabase(path);
@@ -16,7 +16,7 @@ class DbHelper {
         // ignore: empty_catches
       } catch (e) {}
 
-      ByteData data = await rootBundle.load(join("assets", "db.sqlite3"));
+      ByteData data = await rootBundle.load(join("assets", "words.db"));
       List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes, flush: true);
