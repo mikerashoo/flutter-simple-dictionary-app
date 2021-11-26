@@ -1,16 +1,15 @@
 # flutter_simple_dictionary_app
 
-A new Flutter project.
+Flutter based dictionary app.
 
 ## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- create words.db database file using other tools (I used db browser )
+- create table words with columns of languages(I used three language kafinoonoo, amharic, english), id, type (to identify noun, verb...)
+- clone the repo
+- copy words.db file to asset
+- change word model properties with your prefered languages (mine is String kafinoonoo, String english, String amharic) add if necessary
+- Track all occurance of word and replace all word.kafinoonoo property with your main language (for eg. if it is english change word.kafinoonoo with word.english)
+-  Replace all other languages with yours in all word object existance
+-  go to word_detail_screen.dart and navigate rows of word and meaning replace with language name for first child and word.language for second  
+-     (eg. Text("English") with Text("Spanish") and Text(word.english!) with Text(word.spanish!)
+-  run app
